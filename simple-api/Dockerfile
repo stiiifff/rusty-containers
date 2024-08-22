@@ -1,6 +1,6 @@
 ARG BINARY_NAME=simple-api
 
-FROM clux/muslrust:nightly AS build
+FROM clux/muslrust:stable AS build
 ARG BINARY_NAME
 
 # Build dummy main with the project's Cargo lock and toml
@@ -26,5 +26,7 @@ ARG BINARY_NAME
 
 # copy build artifact from the build stage
 COPY --chown=nonroot:nonroot --from=build /out/$BINARY_NAME /
-EXPOSE 8000
+ENV PORT=8080
+ENV RUST_LOG=info
+EXPOSE 8080
 ENTRYPOINT ["/simple-api"]
