@@ -1,4 +1,4 @@
-ARG BINARY_NAME=simple-api
+ARG BINARY_NAME=simple-worker
 
 FROM clux/muslrust:stable AS build
 ARG BINARY_NAME
@@ -11,7 +11,7 @@ COPY Cargo.toml .
 RUN mkdir src \
     && echo "fn main() {print!(\"Dummy main\");} // dummy file" > src/main.rs
 RUN set -x && cargo build --target x86_64-unknown-linux-musl --release
-RUN set -x && rm target/x86_64-unknown-linux-musl/release/deps/simple_api*
+RUN set -x && rm target/x86_64-unknown-linux-musl/release/deps/simple_worker*
 
 # copy app source tree & build for release
 COPY src ./src
@@ -26,7 +26,5 @@ ARG BINARY_NAME
 
 # copy build artifact from the build stage
 COPY --chown=nonroot:nonroot --from=build /out/$BINARY_NAME /
-ENV PORT=8080
 ENV RUST_LOG=info
-EXPOSE 8080
-ENTRYPOINT ["/simple-api"]
+ENTRYPOINT ["/simple-worker"]
