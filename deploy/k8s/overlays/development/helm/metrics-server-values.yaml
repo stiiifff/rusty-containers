@@ -1,0 +1,7 @@
+# Install Metrics Server into local k8S cluster
+# helm install metrics-server --values ./deploy/k8s/development/helm/metrics-server-values.yaml stable/metrics-server -n kube-system
+
+args:
+  # enable this if you have self-signed certificates, see: https://github.com/kubernetes-incubator/metrics-server
+  - --kubelet-insecure-tls
+  - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname

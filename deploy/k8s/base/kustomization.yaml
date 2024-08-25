@@ -1,0 +1,7 @@
+commonLabels:
+    app.kubernetes.io/part-of: rusty-containers
+    app.kubernetes.io/managed-by: kustomize
+
+resources:
+  - simple-api
+  - simple-worker

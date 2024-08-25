@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: simple-worker
+  labels:
+    app.kubernetes.io/component: simple-worker
+spec:
+  concurrencyPolicy: Replace
+  schedule: "* * * * *" # Run every minute
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    metadata:
+      labels:
+        app.kubernetes.io/component: simple-worker
+    spec:
+      backoffLimit: 0
+      ttlSecondsAfterFinished: 100
+      template:
+        spec:
+          automountServiceAccountToken: false
+          containers:
+            - name: simple-worker
+              image: simple-worker:latest
+              imagePullPolicy: Never
+              envFrom:
+                - configMapRef:
+                    name: simple-worker-config
+              # env:
+              securityContext:
+                allowPrivilegeEscalation: false
+          restartPolicy: Never

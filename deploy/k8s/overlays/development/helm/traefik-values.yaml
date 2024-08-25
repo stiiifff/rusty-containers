@@ -1,0 +1,17 @@
+# Install Traefik as ingress controller into local k8S cluster
+# helm repo add traefik https://helm.traefik.io/traefik
+# helm repo update
+# helm install traefik --values ./deploy/k8s/overlays/development/helm/traefik-values.yaml traefik/traefik -n kube-system
+
+dashboard:
+  enabled: true
+  domain: traefik.local
+ssl:
+  enabled: true
+  enforced: true
+  generateTLS: true
+kubernetes:
+  namespaces:
+    - default
+    - kube-system
+    - rusty-containers
