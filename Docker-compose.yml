@@ -1,0 +1,33 @@
+services:
+  simple-worker:
+    image: simple-worker
+    restart: always
+    build:
+      context: ./simple-worker
+      dockerfile: Dockerfile
+    depends_on:
+      - simple-api
+    environment:
+      API_URL: http://simple-api:8080
+      RUST_LOG: simple_worker=info
+    networks:
+      - internal
+
+  simple-api:
+    image: simple-api
+    restart: always
+    build:
+      context: ./simple-api
+      dockerfile: Dockerfile
+    environment:
+      ADDRESS: 0.0.0.0:8080
+      RUST_LOG: simple_api=info,actix_web=info
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    networks:
+      - internal
+
+networks:
+  internal:
